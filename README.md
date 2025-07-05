@@ -15,7 +15,8 @@ This project automatically downloads NASA's "Astronomy Picture of the Day" (APOD
 - Install python requirements: pip install requirements.txt
 - Get your API key here: https://api.nasa.gov/
 - Set the config.ini file with your API key and your save folder
-- ### Execute manually
+## Usage
+- ### Manually
   - To download today image use this command "python APOD.py"
   - To delete all the images in your save folder execute this command: "python removeOldImages.py"
    <br> *the command may vary based on your python installation (example: use python3 instead of python)*
