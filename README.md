@@ -10,7 +10,7 @@ This project automatically downloads NASA's "Astronomy Picture of the Day" (APOD
 ## Requirements
 - Python
 - Windows
-##Installation
+## Installation
 - Clone this repository: https://github.com/GiuseppePorcaro/APOD_Download-Set.git
 - Install python requirements: pip install requirements.txt
 - Get your API key here: https://api.nasa.gov/
