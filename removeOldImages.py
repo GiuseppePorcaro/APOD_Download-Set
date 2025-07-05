@@ -61,4 +61,4 @@ def leggi_config_ini(percorso_file, sezione, chiave, valore_default=None):
 if __name__ == "__main__":
     nascondi_terminale()
     percorso_cartella = leggi_config_ini('./config.ini', 'settings', 'save_folder')
-    cancella_file_vecchi_cartella(percorso_cartella, giorni=0)
+    cancella_file_vecchi_cartella(percorso_cartella, giorni=30)
