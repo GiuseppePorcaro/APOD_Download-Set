@@ -22,7 +22,7 @@ This project automatically downloads NASA's "Astronomy Picture of the Day" (APOD
 - ### Set a Windows activity
   Your can automate the execution by setting a windows activity
   1. Set your file xml: <br>
-    In the activities folder there are two .xml files that allow you to set up Windows tasks for the two Python scripts. Open them, insert your own paths in the <Command>, <Arguments> and <WorkingDirectory> tags. 
+    In the activities folder there are two .xml files that allow you to set up Windows tasks for the two Python scripts. Open them, insert your own paths in the "Command", "Arguments" and "WorkingDirectory" tags. By default the file "Astronomy Picture of the Day.xml" will set the script to run each day at 6:00 am. The file "Remove Old Nasa Images.xml" will set the script to run each 1st of each month. You can set the time you want by modify it.  
   2. Open Task Scheduler: <br>
     Press Win + R, type taskschd.msc and press Enter or search for "Task Scheduler" in the Start menu
 
