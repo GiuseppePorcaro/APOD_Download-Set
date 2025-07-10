@@ -6,9 +6,15 @@ import sys
 import configparser
 import os
 from pathlib import Path
+import logging
+from PIL import Image
+import numpy as np
+from py_real_esrgan.model import RealESRGAN
+import torch
 
 def main():
-    nascondi_terminale()
+    setupApp()
+
     API_key = leggi_config_ini('./config.ini', 'settings', 'API_keys')
     save_folder = leggi_config_ini('./config.ini', 'settings', 'save_folder')
 
@@ -23,8 +29,45 @@ def main():
 
     with open(filename, 'wb') as f:
         f.write(requests.get(url_image).content)
+    
+    img = Image.open(filename)
+    logImageData(img, filename)
 
+    if(isToUpscale(img)):
+        logging.info("Image to small. Scaling x4:")
+        imageScale(filename)
+    
     set_wallpaper_ctypes(filename)
+    logging.info("##############################################################################################")
+
+def imageScale(filename):
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    model = RealESRGAN(device, scale=4)
+    model.load_weights('weights/RealESRGAN_x4.pth', download=True)
+
+    image = Image.open(filename).convert('RGB')
+    sr_image = model.predict(image)
+    sr_image.save(filename)
+    logging.info("Scale success! New size: "+str(sr_image.size))
+
+def isToUpscale(img):
+    imgSize = img.size
+    
+    fullHDTotalPixels = 1092*1080
+    imgTotalPixels = imgSize[0]*imgSize[1]
+    
+    if(imgTotalPixels < fullHDTotalPixels):
+        return True
+
+    return False
+
+def logImageData(img, filename):
+    logging.info(filename)
+    logging.info(f"Dimensioni: {img.size}")
+    logging.info(f"Dimensioni (pixel totali): "+str(img.size[0]*img.size[1]))
+    logging.info(f"Formato: {img.format}")
+    logging.info(f"Modalità: {img.mode}")
 
 def set_wallpaper_ctypes(image_path):
     
@@ -33,7 +76,7 @@ def set_wallpaper_ctypes(image_path):
     
     # Verifica che il file esista
     if not os.path.exists(image_path):
-        print(f"Errore: File non trovato: {image_path}")
+        logging.error(f"Errore: File non trovato: {image_path}")
         return False
     
     # Costanti Windows
@@ -49,16 +92,17 @@ def set_wallpaper_ctypes(image_path):
         )
         
         if result:
-            print(f"Wallpaper impostato con successo: {image_path}")
+            logging.info(f"Wallpaper impostato con successo: {image_path}")
             return True
         else:
-            print("Errore nell'impostazione del wallpaper")
+            logging.error("Errore nell'impostazione del wallpaper")
             return False
             
     except Exception as e:
-        print(f"Errore: {e}")
+        logging.error(f"Errore: {e}")
         return False
-    
+
+
 def nascondi_terminale():
     """Nasconde la finestra del terminale su Windows"""
     if sys.platform == "win32":
@@ -74,11 +118,15 @@ def leggi_config_ini(percorso_file, sezione, chiave, valore_default=None):
         if sezione in config and chiave in config[sezione]:
             return config[sezione][chiave]
         else:
-            print(f"Chiave '{chiave}' non trovata nella sezione '{sezione}'")
+            logging.error(f"Chiave '{chiave}' non trovata nella sezione '{sezione}'")
             return valore_default
             
     except Exception as e:
-        print(f"Errore durante la lettura del file config: {e}")
+        logging.error(f"Errore durante la lettura del file config: {e}")
         return valore_default
+
+def setupApp():
+    #nascondi_terminale()
+    logging.basicConfig(filename='apod.log',level=logging.INFO,format='%(asctime)s - %(levelname)s - %(message)s')
 
 main()
