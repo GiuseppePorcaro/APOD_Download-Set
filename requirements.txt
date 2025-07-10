@@ -1,1 +1,6 @@
+numpy==2.3.1
+Pillow==10.0.1
+Pillow==11.3.0
+py_real_esrgan==2.0.0
 Requests==2.32.4
+torch==2.9.0.dev20250709+cu128
