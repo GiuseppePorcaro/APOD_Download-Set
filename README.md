@@ -3,13 +3,14 @@
 This project automatically downloads NASA's "Astronomy Picture of the Day" (APOD) from the internet, saves it to a custom folder, and sets it as your desktop wallpaper. Additionally, it includes an automatic cleanup feature that removes images older than 30 days from the chosen folder to prevent storage bloat.
 ## Features
 - Automatic APOD Download: Fetches the latest Astronomy Picture of the Day from NASA's API
+- Real-ESRGAN (https://github.com/xinntao/Real-ESRGAN) to scale x4 low resolution images
 - Custom Storage Location: Save images to any folder of your choice
 - Desktop Wallpaper Integration: Automatically sets the downloaded image as your desktop background
 - Automatic Cleanup: Removes images older than 30 days to maintain disk space
 - Automatic execution Configuration: Configurable windows activities through XML files in the folder activities
 ## Requirements
 - Python
-- Windows
+- Windows (only for set a windows activity with .xml)
 ## Installation
 - Clone this repository: https://github.com/GiuseppePorcaro/APOD_Download-Set.git
 - Install python requirements: pip install requirements.txt
