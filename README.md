@@ -13,7 +13,8 @@ This project automatically downloads NASA's "Astronomy Picture of the Day" (APOD
 - Windows (only for set a windows activity with .xml)
 ## Installation
 - Clone this repository: https://github.com/GiuseppePorcaro/APOD_Download-Set.git
-- Install python requirements: pip install requirements.txt
+- Install python requirements: pip -r install requirements.txt
+  - If you have an RTX 50xx install: torch==2.9.0.dev20250709+cu128 --> torch==2.9.0.dev20250709+cu128
 - Get your API key here: https://api.nasa.gov/
 - Set the config.ini file with your API key and your save folder
 ## Usage
