@@ -22,6 +22,14 @@ def main():
     response = requests.get('https://api.nasa.gov/planetary/apod', params=params)
 
     response_json = response.json()
+    if isError(response_json):
+        customStringLog("Errore: "+str(response_json['error']))
+        return
+
+    if not isImage(response_json):
+        customStringLog("L'evento di oggi non è una immagine. Il wallpaper non sarà modificato")
+        return
+    
     url_image = response_json["hdurl"]
     tokens = url_image.split("/")
     size = len(tokens)
@@ -40,6 +48,16 @@ def main():
     set_wallpaper_ctypes(filename)
     logging.info("##############################################################################################")
 
+def isImage(response_json):
+    return "hdurl" in response_json.keys()
+
+def isError(response_json):
+    return "error" in response_json.keys()
+
+def customStringLog(message):
+    logging.info(message)
+    logging.info("##############################################################################################")
+    
 def imageScale(filename):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
