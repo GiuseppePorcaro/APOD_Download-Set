@@ -4,3 +4,4 @@ py_real_esrgan
 Requests
 torch
 install huggingface-hub==0.25.2
+pyautogui

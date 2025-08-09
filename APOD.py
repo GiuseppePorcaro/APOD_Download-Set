@@ -11,9 +11,13 @@ from PIL import Image
 import numpy as np
 from py_real_esrgan.model import RealESRGAN
 import torch
+import pyautogui
 
 def main():
     setupApp()
+
+    larghezza, altezza = pyautogui.size()
+    
 
     API_key = leggi_config_ini('./config.ini', 'settings', 'API_keys')
     save_folder = leggi_config_ini('./config.ini', 'settings', 'save_folder')
@@ -34,19 +38,31 @@ def main():
     tokens = url_image.split("/")
     size = len(tokens)
     filename = save_folder + "" + tokens[size - 1]
+    #filename = save_folder + "lroc_wac_nearside - Copia.jpg"
 
     with open(filename, 'wb') as f:
         f.write(requests.get(url_image).content)
-    
+
+    customStringLog("Risoluzione schermo: "+str(larghezza)+ "x"+str(altezza))
     img = Image.open(filename)
     logImageData(img, filename)
 
     if(isToUpscale(img)):
         logging.info("Image to small. Scaling x4:")
-        imageScale(filename)
+        img = imageScale(filename)
     
+    if(isResizing() == '1'):
+        img = img.resize((larghezza, altezza), Image.LANCZOS)
+    
+    img.save(filename, quality=95)
+
     set_wallpaper_ctypes(filename)
     logging.info("##############################################################################################")
+
+def isResizing():
+    isResizing = leggi_config_ini('./config.ini', 'settings', 'isResizingActive')
+    customStringLog("Resizing: "+str(isResizing))
+    return isResizing
 
 def isImage(response_json):
     return "hdurl" in response_json.keys()
@@ -66,8 +82,10 @@ def imageScale(filename):
 
     image = Image.open(filename).convert('RGB')
     sr_image = model.predict(image)
-    sr_image.save(filename)
+    #sr_image.save(filename)
     logging.info("Scale success! New size: "+str(sr_image.size))
+    return sr_image
+    
 
 def isToUpscale(img):
     imgSize = img.size
